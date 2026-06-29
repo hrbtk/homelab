@@ -1,0 +1,5 @@
+include:
+  - path: "media/docker-compose.yml"
+  - path: "network/docker-compose.yml"
+  - path: "notes/docker-compose.yml"
+  - path: "tools/docker-compose.yml"

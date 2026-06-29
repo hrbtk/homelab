@@ -1,0 +1,40 @@
+name: network
+services:
+  # Pi-Hole
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "8080:80/tcp" # THE FIX: Host port 8080 routes to Container port 80
+    environment:
+      TZ: ${TZ}
+      FTLCONF_webserver_api_password: ${PI_PASSWORD}
+      FTLCONF_dns_listeningMode: all
+      PIHOLE_DNS_1: ${PIHOLE_DNS_1}
+      PIHOLE_DNS_2: ${PIHOLE_DNS_2}
+    volumes:
+      - ${DOCKER}/pihole:/etc/pihole
+    cap_add:
+      - NET_ADMIN
+
+  # Caddy
+  caddy:
+    image: ghcr.io/serfriz/caddy-duckdns:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+      - 443:443/udp
+    environment:
+      - DUCKDNS_TOKEN=${DUCKDNS_TOKEN}
+      - SERVER_IP=${DOCKER_SERVER_IP}
+      - MY_EMAIL=${MY_EMAIL}
+      - MY_DOMAIN=${MY_DOMAIN}
+    volumes:
+      - ${DOCKER}/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ${DOCKER}/caddy/data:/data
+      - ${DOCKER}/caddy/config:/config

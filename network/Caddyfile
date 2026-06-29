@@ -1,0 +1,143 @@
+{
+	email {$MY_EMAIL}
+}
+
+# ==================
+# ==== Snippets ====
+# ==================
+
+(security) {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+	encode
+}
+
+(duckdns_tls) {
+	tls {
+		dns duckdns {env.DUCKDNS_TOKEN}
+		resolvers 1.1.1.1 8.8.8.8
+	}
+}
+
+# ==================
+# ====== HTTPS =====
+# ==================
+
+proxmox.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy 192.168.1.100:8006 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+	}
+}
+
+# ==================
+# ====== HTTP ======
+# ==================
+
+# Network
+pihole.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:8080
+}
+
+# Media
+jellyfin.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:8096
+}
+
+qbittorrent.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:8085
+}
+
+sonarr.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:8989
+}
+
+radarr.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:7878
+}
+
+prowlarr.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:9696
+}
+
+gopds.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:9999
+}
+
+# Notes
+pad.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:13001
+}
+
+ignis.{$MY_DOMAIN}{
+    import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:13004
+}
+
+# Tools
+nextexplorer.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:10000
+}
+
+termix.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:10001
+}
+
+dockhand.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:10002
+}
+
+it-tools.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:10003
+}
+
+pdf-tools.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:10004
+}
+
+image-tools.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:10005
+}
+
+excalidraw.{$MY_DOMAIN}{
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:10006
+}

@@ -1,0 +1,29 @@
+name: notes
+services:
+  dumbpad:
+    image: dumbwareio/dumbpad:latest
+    container_name: dumbpad
+    restart: unless-stopped
+    ports:
+      - 11000:3000
+    volumes:
+      - ${DOCKER}/dumbpad/data:/app/data
+    environment:
+      SITE_TITLE: ${DUMBPAD_SITE_TITLE}
+      DUMBPAD_PIN: ${DUMBPAD_PIN}
+      BASE_URL: ${DUMBPAD_BASE_URL}
+
+  ignis:
+    image: nobbe/ignis:latest
+    container_name: ignis
+    ports:
+      - 11001:8080
+    environment:
+      - OBSIDIAN_VERSION=1.12.7
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ${DATA}/files/obsidian-vaults:/vaults
+      - ${DOCKER}/ignis/data:/app/data
+      - ${DOCKER}/ignis/obsidian-app:/app/obsidian-app
+    restart: unless-stopped

@@ -1,0 +1,91 @@
+name: tools
+services:
+  # NextExlorer
+  nextexplorer:
+    image: nxzai/explorer:latest
+    container_name: nextexplorer
+    restart: unless-stopped
+    ports:
+      - 10000:3000
+    environment:
+      - NODE_ENV=production
+      - PUBLIC_URL=https://nextexplorer.herbatka-test.duckdns.org
+      - UID=${PUID}
+      - GID=${PGID}
+    volumes:
+      - ${DOCKER}/nextexplorer/config:/config
+      - ${DOCKER}/nextexplorer/cache:/cache
+      - ${HOME}:/mnt/Home
+      - ${HDD}:/mnt/HDD
+
+  # Termix
+  termix:
+    image: ghcr.io/lukegus/termix:latest
+    container_name: termix
+    restart: unless-stopped
+    ports:
+      - 10001:8080
+    volumes:
+      - termix-data:/app/data
+    environment:
+      - PORT=8080
+      - PUID=${PUID}
+      - PGID=${PGID}
+
+  # Docker mangement
+  dockhand:
+    image: fnsys/dockhand:latest
+    container_name: dockhand
+    restart: unless-stopped
+    user: ${PUID}:${PGID}
+    group_add:
+      - "983"
+    ports:
+      - 10002:3000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER}/dockhand/data:/app/data
+      - /home/herbatka/dev/media-server:/composes
+
+  # IT Tools
+  it-tools:
+    image: corentinth/it-tools:latest
+    container_name: it-tools
+    restart: unless-stopped
+    hostname: it-tools
+    ports:
+      - 10003:80
+
+  # PDF Tools
+  bentopdf:
+    image: bentopdf/bentopdf-simple:latest
+    container_name: bentopdf
+    ports:
+      - 10004:8080
+    restart: unless-stopped
+
+  # Image tools
+  snap-otter:
+    image: snapotter/snapotter:latest
+    container_name: snap-otter
+    ports:
+      - 10005:1349
+    volumes:
+      - ${DOCKER}/snap-otter/data:/data
+    environment:
+      - AUTH_ENABLED=true
+      - DEFAULT_USERNAME=${SNAPOTTER_LOGIN}
+      - DEFAULT_PASSWORD=${SNAPOTTER_PASSWORD}
+    restart: unless-stopped
+
+  # Diagram tools
+  excalidraw:
+    container_name: excalidraw
+    image: excalidraw/excalidraw:latest
+    ports:
+      - 10006:80
+    restart: unless-stopped
+
+volumes:
+  termix-data:
+    driver: local

@@ -1,0 +1,107 @@
+name: media
+services:
+  # Jellyfin
+  jellyfin:
+    container_name: jellyfin
+    image: jellyfin/jellyfin
+    user: ${PUID}:${PGID}
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ${DOCKER}/jellyfin/config:/config
+      - ${DOCKER}/jellyfin/cache:/cache
+      - ${MEDIA}:/data/media
+    ports:
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # qBitTorrent
+  qbittorrent:
+    container_name: qbittorrent
+    image: lscr.io/linuxserver/qbittorrent:latest
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8085
+      - TORRENTING_PORT=6881
+    volumes:
+      - ${DOCKER}/qBittorrent:/config/qBittorrent
+      - ${TORRENTS}:/data/torrents #optional
+    ports:
+      - 8085:8085
+      - 6881:6881
+      - 6881:6881/udp
+
+  # Sonarr
+  sonarr:
+    container_name: sonarr
+    image: lscr.io/linuxserver/sonarr:latest
+    restart: unless-stopped
+    depends_on:
+      - prowlarr
+      - qbittorrent
+    volumes:
+      - ${DOCKER}/sonarr/config:/config
+      - ${DATA}:/data
+    ports:
+      - 8989:8989
+
+  # Radarr
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    depends_on:
+      - prowlarr
+      - qbittorrent
+    volumes:
+      - ${DOCKER}/radarr/config:/config
+      - ${DATA}:/data
+    ports:
+      - 7878:7878
+
+  # Prowlarr
+  prowlarr:
+    container_name: prowlarr
+    image: lscr.io/linuxserver/prowlarr:latest
+    restart: unless-stopped
+    depends_on:
+      - qbittorrent
+    volumes:
+      - ${DOCKER}/prowlarr/config:/config
+    ports:
+      - 9696:9696
+
+  # GOPDS
+  gopds:
+    image: ghcr.io/ab0oo/gopds:latest
+    container_name: gopds
+    restart: unless-stopped
+    user: ${PUID}:${PGID}
+    ports:
+      - 9999:8880
+    environment:
+      - BOOK_PATH=/app/books
+      - DB_PATH=/app/data/gopds.db
+      - CATEGORY_FROM_PATH=true
+      - ADMIN_USERNAME=${GOPDS_ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${GOPDS_ADMIN_PASSWORD}
+    volumes:
+      - ${DATA}/files/books:/app/books
+      - ${DOCKER}/gopds/data:/app/data
