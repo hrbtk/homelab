@@ -12,9 +12,9 @@ services:
       - TZ=${TZ}
       - NVIDIA_VISIBLE_DEVICES=all
     volumes:
-      - ${DOCKER}/jellyfin/config:/config
-      - ${DOCKER}/jellyfin/cache:/cache
-      - ${MEDIA}:/data/media
+      - ${DOCKER_DIR}/jellyfin/config:/config
+      - ${DOCKER_DIR}/jellyfin/cache:/cache
+      - ${MEDIA_DIR}:/data/media
     ports:
       - 8096:8096
       - 8920:8920 #optional
@@ -41,8 +41,8 @@ services:
       - WEBUI_PORT=8085
       - TORRENTING_PORT=6881
     volumes:
-      - ${DOCKER}/qBittorrent:/config/qBittorrent
-      - ${TORRENTS}:/data/torrents #optional
+      - ${DOCKER_DIR}/qBittorrent:/config/qBittorrent
+      - ${TORRENTS_DIR}:/data/torrents #optional
     ports:
       - 8085:8085
       - 6881:6881
@@ -57,8 +57,8 @@ services:
       - prowlarr
       - qbittorrent
     volumes:
-      - ${DOCKER}/sonarr/config:/config
-      - ${DATA}:/data
+      - ${DOCKER_DIR}/sonarr/config:/config
+      - ${DATA_DIR}:/data
     ports:
       - 8989:8989
 
@@ -71,8 +71,8 @@ services:
       - prowlarr
       - qbittorrent
     volumes:
-      - ${DOCKER}/radarr/config:/config
-      - ${DATA}:/data
+      - ${DOCKER_DIR}/radarr/config:/config
+      - ${DATA_DIR}:/data
     ports:
       - 7878:7878
 
@@ -84,7 +84,7 @@ services:
     depends_on:
       - qbittorrent
     volumes:
-      - ${DOCKER}/prowlarr/config:/config
+      - ${DOCKER_DIR}/prowlarr/config:/config
     ports:
       - 9696:9696
 
@@ -103,5 +103,5 @@ services:
       - ADMIN_USERNAME=${GOPDS_ADMIN_USERNAME}
       - ADMIN_PASSWORD=${GOPDS_ADMIN_PASSWORD}
     volumes:
-      - ${DATA}/files/books:/app/books
-      - ${DOCKER}/gopds/data:/app/data
+      - ${DATA_DIR}/files/books:/app/books
+      - ${DOCKER_DIR}/gopds/data:/app/data

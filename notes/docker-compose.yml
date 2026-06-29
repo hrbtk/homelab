@@ -7,7 +7,7 @@ services:
     ports:
       - 11000:3000
     volumes:
-      - ${DOCKER}/dumbpad/data:/app/data
+      - ${DOCKER_DIR}/dumbpad/data:/app/data
     environment:
       SITE_TITLE: ${DUMBPAD_SITE_TITLE}
       DUMBPAD_PIN: ${DUMBPAD_PIN}
@@ -23,7 +23,7 @@ services:
       - PUID=1000
       - PGID=1000
     volumes:
-      - ${DATA}/files/obsidian-vaults:/vaults
-      - ${DOCKER}/ignis/data:/app/data
-      - ${DOCKER}/ignis/obsidian-app:/app/obsidian-app
+      - ${DATA_DIR}/files/obsidian-vaults:/vaults
+      - ${DOCKER_DIR}/ignis/data:/app/data
+      - ${DOCKER_DIR}/ignis/obsidian-app:/app/obsidian-app
     restart: unless-stopped

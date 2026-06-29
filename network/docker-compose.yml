@@ -16,7 +16,7 @@ services:
       PIHOLE_DNS_1: ${PIHOLE_DNS_1}
       PIHOLE_DNS_2: ${PIHOLE_DNS_2}
     volumes:
-      - ${DOCKER}/pihole:/etc/pihole
+      - ${DOCKER_DIR}/pihole:/etc/pihole
     cap_add:
       - NET_ADMIN
 
@@ -35,6 +35,6 @@ services:
       - MY_EMAIL=${MY_EMAIL}
       - MY_DOMAIN=${MY_DOMAIN}
     volumes:
-      - ${DOCKER}/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - ${DOCKER}/caddy/data:/data
-      - ${DOCKER}/caddy/config:/config
+      - ${DOCKER_DIR}/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ${DOCKER_DIR}/caddy/data:/data
+      - ${DOCKER_DIR}/caddy/config:/config
