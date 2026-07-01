@@ -76,18 +76,6 @@ services:
     ports:
       - 7878:7878
 
-  # Prowlarr
-  prowlarr:
-    container_name: prowlarr
-    image: lscr.io/linuxserver/prowlarr:latest
-    restart: unless-stopped
-    depends_on:
-      - qbittorrent
-    volumes:
-      - ${DOCKER_DIR}/prowlarr/config:/config
-    ports:
-      - 9696:9696
-
   # GOPDS
   gopds:
     image: ghcr.io/ab0oo/gopds:latest
