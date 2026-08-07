@@ -81,7 +81,7 @@ services:
     image: ghcr.io/ab0oo/gopds:latest
     container_name: gopds
     restart: unless-stopped
-    user: ${PUID}:${PGID}
+    user: "1000:1000"
     ports:
       - 9999:8880
     environment:
@@ -93,3 +93,20 @@ services:
     volumes:
       - ${DATA_DIR}/files/books:/app/books
       - ${DOCKER_DIR}/gopds/data:/app/data
+
+  # ePubLift
+  epublift:
+    image: ghcr.io/epublift/epublift-web:latest
+    container_name: epublift
+    restart: unless-stopped
+    ports:
+      - 9998:8080
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 1g
+    pids_limit: 256
