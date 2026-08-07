@@ -1,0 +1,15 @@
+name: dockhand
+services:
+  dockhand:
+    image: fnsys/dockhand:latest
+    container_name: dockhand
+    restart: unless-stopped
+    user: ${PUID}:${PGID}
+    group_add:
+      - "983"
+    ports:
+      - 10002:3000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_DIR}/dockhand/data:/app/data
+      - ${HOME_DIR}/dev/media-server:/composes
