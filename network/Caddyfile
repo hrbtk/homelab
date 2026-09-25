@@ -42,6 +42,13 @@ proxmox.{$MY_DOMAIN} {
 # ====== HTTP ======
 # ==================
 
+# Docker
+dockhand.{$MY_DOMAIN} {
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:10000
+}
+
 # Network
 pihole.{$MY_DOMAIN} {
 	import duckdns_tls
@@ -86,58 +93,39 @@ gopds.{$MY_DOMAIN} {
 	reverse_proxy {$SERVER_IP}:9999
 }
 
-# Notes
-pad.{$MY_DOMAIN} {
+# Tools
+nextexplorer.{$MY_DOMAIN} {
 	import duckdns_tls
 	import security
 	reverse_proxy {$SERVER_IP}:11000
 }
 
-ignis.{$MY_DOMAIN} {
-    import duckdns_tls
-	import security
-	reverse_proxy {$SERVER_IP}:11001
-}
-
-# Tools
-nextexplorer.{$MY_DOMAIN} {
-	import duckdns_tls
-	import security
-	reverse_proxy {$SERVER_IP}:10000
-}
-
 termix.{$MY_DOMAIN} {
 	import duckdns_tls
 	import security
-	reverse_proxy {$SERVER_IP}:10001
-}
-
-dockhand.{$MY_DOMAIN} {
-	import duckdns_tls
-	import security
-	reverse_proxy {$SERVER_IP}:10002
+	reverse_proxy {$SERVER_IP}:11001
 }
 
 it-tools.{$MY_DOMAIN} {
 	import duckdns_tls
 	import security
-	reverse_proxy {$SERVER_IP}:10003
+	reverse_proxy {$SERVER_IP}:11002
 }
 
 pdf-tools.{$MY_DOMAIN} {
 	import duckdns_tls
 	import security
-	reverse_proxy {$SERVER_IP}:10004
-}
-
-image-tools.{$MY_DOMAIN} {
-	import duckdns_tls
-	import security
-	reverse_proxy {$SERVER_IP}:10005
+	reverse_proxy {$SERVER_IP}:11003
 }
 
 excalidraw.{$MY_DOMAIN} {
 	import duckdns_tls
 	import security
-	reverse_proxy {$SERVER_IP}:10006
+	reverse_proxy {$SERVER_IP}:10004
+}
+
+pad.{$MY_DOMAIN} {
+	import duckdns_tls
+	import security
+	reverse_proxy {$SERVER_IP}:11005
 }

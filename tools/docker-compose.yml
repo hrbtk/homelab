@@ -6,7 +6,7 @@ services:
     container_name: nextexplorer
     restart: unless-stopped
     ports:
-      - 10000:3000
+      - 11000:3000
     environment:
       - NODE_ENV=production
       - PUBLIC_URL=https://nextexplorer.herbatka-test.duckdns.org
@@ -24,7 +24,7 @@ services:
     container_name: termix
     restart: unless-stopped
     ports:
-      - 10001:8080
+      - 11001:8080
     volumes:
       - termix-data:/app/data
     environment:
@@ -39,14 +39,14 @@ services:
     restart: unless-stopped
     hostname: it-tools
     ports:
-      - 10003:80
+      - 11002:80
 
   # PDF Tools
   bentopdf:
     image: bentopdf/bentopdf-simple:latest
     container_name: bentopdf
     ports:
-      - 10004:8080
+      - 11003:8080
     restart: unless-stopped
 
   # Diagram tools
@@ -54,8 +54,22 @@ services:
     container_name: excalidraw
     image: excalidraw/excalidraw:latest
     ports:
-      - 10006:80
+      - 11004:80
     restart: unless-stopped
+
+  # DumbPad notes
+  dumbpad:
+    image: dumbwareio/dumbpad:latest
+    container_name: dumbpad
+    restart: unless-stopped
+    ports:
+      - 11005:3000
+    volumes:
+      - ${DOCKER_DIR}/dumbpad/data:/app/data
+    environment:
+      SITE_TITLE: ${DUMBPAD_SITE_TITLE}
+      DUMBPAD_PIN: ${DUMBPAD_PIN}
+      BASE_URL: ${DUMBPAD_BASE_URL}
 
 volumes:
   termix-data:
